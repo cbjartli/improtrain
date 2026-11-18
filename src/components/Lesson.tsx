@@ -7,6 +7,7 @@ import { concertToWritten, keyPrefersFlats, noteName, pcName } from '../theory/n
 import { NoteSlots, type Attempt } from './NoteSlots'
 import { PitchMeter } from './PitchMeter'
 import { Results } from './Results'
+import { StaffView } from './StaffView'
 
 export type Phase = 'idle' | 'demo' | 'listen' | 'results'
 
@@ -199,14 +200,9 @@ export function Lesson({ settings, engine, ensureAudio, onNoteScored, onExercise
     const beat = 60 / settings.bpm
     const t0 = engine.synth.now + 0.15
     midis.forEach((m, i) => {
-      const when = t0 + i * beat
-      engine.synth.playNote(m, when, beat * 0.85)
-      scheduleAt(engine, when, () => setDemoNote(i))
+      engine.synth.playNote(m, t0 + i * beat, beat * 0.85)
     })
-    scheduleAt(engine, t0 + midis.length * beat + 0.2, () => {
-      setDemoNote(null)
-      setReplaying(false)
-    })
+    scheduleAt(engine, t0 + midis.length * beat + 0.2, () => setReplaying(false))
   }
 
   const keyLabel = `${pcName(settings.keyRootPc, preferFlats)} ${SCALES[settings.scale].label}`
@@ -267,10 +263,9 @@ export function Lesson({ settings, engine, ensureAudio, onNoteScored, onExercise
             Play note {Math.min(attempts.length + 1, exercise.targetsConcert.length)} of{' '}
             {exercise.targetsConcert.length}
           </p>
-          <NoteSlots
+          <StaffView
             count={exercise.targetsConcert.length}
             attempts={attempts}
-            activeIndex={attempts.length}
             instrument={settings.instrument}
             preferFlats={preferFlats}
           />
@@ -291,7 +286,6 @@ export function Lesson({ settings, engine, ensureAudio, onNoteScored, onExercise
           preferFlats={preferFlats}
           replays={replays}
           replaying={replaying}
-          playingIndex={slotPlaying}
           onReplayTarget={() => replayNotes(exercise.targetsConcert)}
           onReplayYours={() => replayNotes(attempts.map((a) => a.played))}
           onRetry={() => void begin(exercise)}

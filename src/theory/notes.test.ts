@@ -5,6 +5,7 @@ import {
   freqToMidiFloat,
   keyPrefersFlats,
   midiToFreq,
+  midiToVexKey,
   noteName,
   writtenToConcert,
 } from './notes'
@@ -48,5 +49,14 @@ describe('pitch math', () => {
     const sharp20 = 440 * Math.pow(2, 20 / 1200)
     expect(centsOff(sharp20, 69)).toBe(20)
     expect(centsOff(440, 69)).toBe(0)
+  })
+})
+
+describe('midiToVexKey', () => {
+  it('maps naturals and accidentals to VexFlow keys', () => {
+    expect(midiToVexKey(60)).toEqual({ key: 'c/4', accidental: null })
+    expect(midiToVexKey(70)).toEqual({ key: 'bb/4', accidental: 'b' })
+    expect(midiToVexKey(70, false)).toEqual({ key: 'a#/4', accidental: '#' })
+    expect(midiToVexKey(90, false)).toEqual({ key: 'f#/6', accidental: '#' })
   })
 })

@@ -8,7 +8,8 @@ Browser-based ear training and jazz chops for wind players (built around sax).
 2. It then plays a short **phrase** of notes.
 3. **Play the phrase back** on your horn. The mic + pitch detection score every note as you go
    (score-and-continue: a miss doesn't stop the phrase).
-4. The results screen reveals the target notes vs. what you played, with intonation in cents.
+4. The results screen reveals the target notes vs. what you played, with intonation in cents,
+   plus staff notation: your notes in green/red, with the intended note in gold on misses.
    Replay the target or your own take, retry the phrase, or move on.
 
 All note names are shown as **written pitch** for your instrument (tenor Bb by default; alto Eb
@@ -21,7 +22,7 @@ phrase length, note range, largest melodic leap, and tempo. Settings persist in 
 
 ## Tech
 
-- React + TypeScript + Vite, no audio dependencies.
+- React + TypeScript + Vite; VexFlow for staff notation.
 - Playback: Web Audio synth (detuned saws → lowpass → envelope + vibrato).
 - Pitch detection: McLeod Pitch Method (NSDF autocorrelation, parabolic interpolation)
   on raw mic input (`src/audio/pitchDetector.ts`).

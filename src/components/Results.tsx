@@ -1,6 +1,7 @@
 import type { Exercise } from '../theory/exercise'
 import type { Instrument } from '../theory/notes'
-import { NoteSlots, type Attempt } from './NoteSlots'
+import type { Attempt } from './NoteSlots'
+import { StaffView } from './StaffView'
 
 interface ResultsProps {
   exercise: Exercise
@@ -9,7 +10,6 @@ interface ResultsProps {
   preferFlats: boolean
   replays: number
   replaying: boolean
-  playingIndex: number | null
   onReplayTarget: () => void
   onReplayYours: () => void
   onRetry: () => void
@@ -32,7 +32,6 @@ export function Results({
   preferFlats,
   replays,
   replaying,
-  playingIndex,
   onReplayTarget,
   onReplayYours,
   onRetry,
@@ -54,12 +53,11 @@ export function Results({
         )}
       </div>
 
-      <NoteSlots
+      <StaffView
         count={total}
         attempts={attempts}
         targets={exercise.targetsConcert}
         reveal
-        playingIndex={playingIndex}
         instrument={instrument}
         preferFlats={preferFlats}
       />

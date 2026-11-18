@@ -44,3 +44,18 @@ export const freqToMidiFloat = (freq: number): number => 69 + 12 * Math.log2(fre
 export function centsOff(freq: number, midi: number): number {
   return Math.round((freqToMidiFloat(freq) - midi) * 100)
 }
+
+export interface VexKey {
+  /** VexFlow key string, e.g. `bb/4`. */
+  key: string
+  accidental: '#' | 'b' | null
+}
+
+/** Maps a (written) MIDI note to VexFlow's key/accidental notation. */
+export function midiToVexKey(midi: number, preferFlats = true): VexKey {
+  const name = pcName(midi % 12, preferFlats)
+  const octave = Math.floor(midi / 12) - 1
+  const letter = name[0].toLowerCase()
+  const accidental = name.length > 1 ? (name[1] as '#' | 'b') : null
+  return { key: `${letter}${accidental ?? ''}/${octave}`, accidental }
+}
